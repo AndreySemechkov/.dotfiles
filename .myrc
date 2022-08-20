@@ -1,0 +1,93 @@
+. "$HOME/.cargo/env"
+
+# enable custom bins
+export PATH=$PATH:~/bin
+
+# enable poetry in zsh
+fpath+=~/.zfunc
+
+
+PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
+export PATH=/Users/andrey_semetchkov/.pyenv/bin:/Users/andrey_semetchkov/.poetry/bin:$PATH
+
+
+#########
+# PYTHON
+#########
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# Disable pip installs outside of virtualenvs
+export PIP_REQUIRE_VIRTUALENV=true
+
+# Disable annoying pyenv venv prompt
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# solves issues with pip
+export DYLD_LIBRARY_PATH=/usr/local/Cellar/openssl@1.1/1.1.1i/lib:/usr/local/Cellar/mysql@5.7/5.7.32/lib
+export CPPFLAGS='-I/usr/local/Cellar/openssl@1.1/1.1.1i/include'
+export LDFLAGS='-L/usr/local/Cellar/openssl@1.1/1.1.1i/lib'
+#gradle
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
+export PATH=$PATH:/usr/local/Cellar/mysql@5.7/5.7.32/bin
+
+
+
+#########
+# NODEJS
+#########
+# NVM and NodeJS configurations
+export NVM_DIR="$HOME/.nvm"
+
+__lazynvm()
+{
+    unset -f nvm node npm __lazynvm
+    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+}
+nvm  (){ __lazynvm; nvm  $@; }
+node (){ __lazynvm; node $@; }
+npm  (){ __lazynvm; npm  $@; }
+
+[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"
+export PATH="$NVM_DIR/versions/node/v16.15.1/bin:$PATH"
+
+
+# Doing it here in order for pipx installed packages to have precedence over venv names
+export PATH=/Users/andrey_semetchkov/.local/bin:$PATH
+export PATH=/usr/local/go/bin:$PATH
+export PATH=/Users/andrey_semetchkov/.cargo/bin:$PATH
+
+#########
+# ALIASES
+#########
+
+## Git
+alias gs='git status'
+alias ga='git add'
+alias gd='git diff'
+alias gc='git add . && git commit --all --message'
+alias gcr='git checkout master && git pull && git checkout - && git rebase -i master'
+alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --graph"
+alias gcm="git checkout master"
+alias gpu="git pull"
+alias gcmu="gcm && gpu"
+alias gss="git stash save --include-untracked"
+alias gsp="git stash pop"
+alias grc="git rebase --continue"
+alias grm="git rebase -i master"
+alias gco="git checkout"
+alias gcp="git checkout -"
+alias gp="git push"
+alias gpf="git push -f"
+alias gbd="git branch -D"
+alias gdm='git diff master'
+alias gca='git commit --amend'
+alias gitm='git commit --message'
+
+
+## AWS
+alias aws='~/.local/bin/aws2/aws-cli/aws'
+
+## dev
+alias cdev='cd ~/dev'
+alias ll="ls -al"
