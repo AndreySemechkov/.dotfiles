@@ -1,0 +1,30 @@
+# this is an example ssh config that needs manual adaption to the org topology
+
+# Boundary config
+Host <IP-*>
+ ProxyCommand ~/.ssh/boundary_connect.sh aws main <region> %n
+#Host  <list of ips with wildcards [<IP-*>]>
+ ProxyCommand ~/.ssh/boundary_connect.sh aws main <region> %n
+
+
+#Host <list of ips with wildcards IP-*>
+ AddressFamily inet
+ UseKeychain <yes/no>
+ IdentityFile ~/.ssh/privatekey
+ CheckHostIP <yes/no>
+ StrictHostKeyChecking <yes/no>
+ IdentitiesOnly <yes/no>
+ User myuser
+ SendEnv LANG LC_*
+ PasswordAuthentication <yes/no>
+
+#Host <list of ips with wildcards IP-*>
+ AddressFamily inet
+ UseKeychain <yes/no>
+ IdentityFile ~/.ssh/privatekey
+ CheckHostIP <yes/no>
+ StrictHostKeyChecking <yes/no>
+ IdentitiesOnly <yes/no>
+ User myuser
+ SendEnv LANG LC_*
+ PasswordAuthentication <yes/no>
