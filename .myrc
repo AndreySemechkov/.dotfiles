@@ -113,9 +113,7 @@ alias esw='ec2 --region us-west-2 ssh -F ~/.ssh/config'
 #  follow_chef <node_ip>
 #  Following docker logs on a node:
 #  follow_docker <node_ip>
-#  Connecting as ubuntu + changing to root + setting all proxies as needed for pcimon:
 #  sudo_ssh <node_ip>
-#  I use them all the time, thought it might be useful to you too
 
 follow_chef () {
    ssh -F /Users/andrey_semetchkov/.ssh/gozer ubuntu@$1 "tail -f -n 10 /var/log/chef-client.firstboot.log | sed '/Firstboot script done/ q'"
@@ -123,11 +121,7 @@ follow_chef () {
 
 follow_docker () {
    ssh -F /Users/andrey_semetchkov/.ssh/gozer ubuntu@$1 "journalctl -f -u docker.service"
-}
-
-sudo_ssh () {
-   ssh -F /Users/andrey_semetchkov/.ssh/gozer -t ubuntu@$1 "echo "Exporting ENV";export http_proxy=http://squid.frdstr.com:80 https_proxy=http://squid.frdstr.com:80 no_proxy=localhost,127.0.0.1,169.254.169.254,169.254.169.123,artifactory.frdstr.com,vault.frdstr.com;export HTTP_PROXY=$http_proxy HTTPS_PROXY=$https_proxy NO_PROXY=$no_proxy;echo "Switching to root";sudo --preserve-env bash"
-}
+}}
 
 ssh_re_logstash () {
    ssh -F /Users/andrey_semetchkov/.ssh/gozer -t ubuntu@$1 "echo "Switching to root";sudo --preserve-env docker restart logstash;sudo docker ps"
