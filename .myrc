@@ -105,8 +105,8 @@ alias ll="ls -al"
 alias ec2use='ec2 ls'
 alias ec2usw='ec2 --region us-west-2 ls'
 alias ec2euw='ec2 --region eu-west-1 ls'
-alias ese='ec2 ssh -F ~/.ssh/config'
-alias esw='ec2 --region us-west-2 ssh -F ~/.ssh/config'
+alias ecuse='ec2 ssh -F ~/.ssh/config'
+alias ecusw='ec2 --region us-west-2 ssh -F ~/.ssh/config'
 
 #  Usage:
 #  Following chef output in a node:
@@ -121,8 +121,15 @@ follow_chef () {
 
 follow_docker () {
    ssh -F /Users/andrey_semetchkov/.ssh/gozer ubuntu@$1 "journalctl -f -u docker.service"
-}}
+}
 
 ssh_re_logstash () {
    ssh -F /Users/andrey_semetchkov/.ssh/gozer -t ubuntu@$1 "echo "Switching to root";sudo --preserve-env docker restart logstash;sudo docker ps"
+}
+
+auth () {
+    AWS_PROFILE=sso aws sso login
+    boundary authenticate oidc -addr https://boundary.frdstr.com:9200 -auth-method-id amoidc_7XurEVv7KV
+    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.frdstr.com boundary connect -addr https://boundary.frdstr.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec forter -- gozer auth
+    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.frdstr.com boundary connect -addr https://boundary.frdstr.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec forter -- gozer request
 }
