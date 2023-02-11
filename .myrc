@@ -84,10 +84,15 @@ alias gdm='git diff master'
 alias gca='git commit --amend'
 alias gitm='git commit --message'
 
+<<<<<<< HEAD
 
 ## AWS
 alias aws='~/.local/bin/aws2/aws-cli/aws'
 
+## dev
+alias cdev='cd ~/dev'
+alias ll="ls -al"
+=======
 ## dev
 alias cdev='cd ~/dev'
 alias ll="ls -al"
