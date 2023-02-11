@@ -17,9 +17,6 @@ export PATH=/Users/andrey_semetchkov/.pyenv/bin:/Users/andrey_semetchkov/.poetry
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-# Set the default venv to be forter's
-pyenv global forter-3.8.6
-
 # Disable pip installs outside of virtualenvs
 export PIP_REQUIRE_VIRTUALENV=true
 
@@ -87,17 +84,6 @@ alias gdm='git diff master'
 alias gca='git commit --amend'
 alias gitm='git commit --message'
 
-## Forter git stuff
-alias ffc='forter feature create -n'
-alias fff='forter feature from -a'
-alias foci='forter open ci'
-alias fopr='forter open pr'
-alias fpr='git push && forter feature pr -o'
-alias fprr='fpr -r '
-
-## AWS
-alias aws='~/.local/bin/aws2/aws-cli/aws'
-
 ## dev
 alias cdev='cd ~/dev'
 alias ll="ls -al"
@@ -129,7 +115,6 @@ ssh_re_logstash () {
 
 auth () {
     AWS_PROFILE=sso aws sso login
-    boundary authenticate oidc -addr https://boundary.frdstr.com:9200 -auth-method-id amoidc_7XurEVv7KV
-    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.frdstr.com boundary connect -addr https://boundary.frdstr.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec forter -- gozer auth
-    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.frdstr.com boundary connect -addr https://boundary.frdstr.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec forter -- gozer request
+    boundary authenticate oidc -addr https://boundary.mydomain.com:9200 -auth-method-id amoidc_7XurEVv7KV
+    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.mydomain.com boundary connect -addr https://boundary.mydomain.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec <LOGIN>
 }
