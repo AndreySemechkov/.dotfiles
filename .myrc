@@ -1,21 +1,13 @@
-. "$HOME/.cargo/env"
-
-# enable custom bins
-export PATH=$PATH:~/bin
-
+#Python
 # enable poetry in zsh
 fpath+=~/.zfunc
 
 
-PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
-export PATH=/Users/andrey_semetchkov/.pyenv/bin:/Users/andrey_semetchkov/.poetry/bin:$PATH
+PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:~/bin
+export PATH=/Users/andreys/.pyenv/bin:/Users/andreys/.poetry/bin:/usr/local/bin:$PATH
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-#########
-# PYTHON
-#########
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 # Disable pip installs outside of virtualenvs
 export PIP_REQUIRE_VIRTUALENV=true
@@ -30,32 +22,39 @@ export LDFLAGS='-L/usr/local/Cellar/openssl@1.1/1.1.1i/lib'
 #gradle
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
 export PATH=$PATH:/usr/local/Cellar/mysql@5.7/5.7.32/bin
-
-
-
-#########
-# NODEJS
-#########
-# NVM and NodeJS configurations
-export NVM_DIR="$HOME/.nvm"
-
-__lazynvm()
-{
-    unset -f nvm node npm __lazynvm
-    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-}
-nvm  (){ __lazynvm; nvm  $@; }
-node (){ __lazynvm; node $@; }
-npm  (){ __lazynvm; npm  $@; }
-
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"
-export PATH="$NVM_DIR/versions/node/v16.15.1/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+# Add Visual Studio Code (code)
 
 
 # Doing it here in order for pipx installed packages to have precedence over venv names
-export PATH=/Users/andrey_semetchkov/.local/bin:$PATH
+export PATH=/Users/andreys/.local/bin:$PATH
 export PATH=/usr/local/go/bin:$PATH
-export PATH=/Users/andrey_semetchkov/.cargo/bin:$PATH
+export PATH=/Users/andreys/.cargo/bin:$PATH
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv activate qwilt
+
+# Terminal
+parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
+}
+COLOR_DEF='%f'
+COLOR_DIR='%F{197}'
+COLOR_GIT='%F{39}'
+NEWLINE=$'\n'
+setopt PROMPT_SUBST
+source ~/kube-ctx.sh
+export PROMPT='${COLOR_DIR}%d ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}${NEWLINE}$(__kube_ps1)%% \$  '
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+# fzf
+# enable zsh autocomplete by /opt/homebrew/opt/fzf/install
+# fig (CLI autocomplete)
 
 #########
 # ALIASES
@@ -68,9 +67,12 @@ alias gd='git diff'
 alias gc='git add . && git commit --all --message'
 alias gcr='git checkout master && git pull && git checkout - && git rebase -i master'
 alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --graph"
-alias gcm="git checkout master"
+alias gcm="git checkout main"
+alias gcms="git checkout master"
+alias gbc="git pull && git checkout -b ${1}"
 alias gpu="git pull"
 alias gcmu="gcm && gpu"
+alias gcmsu="gcms && gpu"
 alias gss="git stash save --include-untracked"
 alias gsp="git stash pop"
 alias grc="git rebase --continue"
@@ -80,11 +82,10 @@ alias gcp="git checkout -"
 alias gp="git push"
 alias gpf="git push -f"
 alias gbd="git branch -D"
-alias gdm='git diff master'
+alias gdm='git diff main'
 alias gca='git commit --amend'
 alias gitm='git commit --message'
 
-<<<<<<< HEAD
 
 ## AWS
 alias aws='~/.local/bin/aws2/aws-cli/aws'
@@ -92,7 +93,13 @@ alias aws='~/.local/bin/aws2/aws-cli/aws'
 ## dev
 alias cdev='cd ~/dev'
 alias ll="ls -al"
-=======
-## dev
-alias cdev='cd ~/dev'
-alias ll="ls -al"
+alias ssogcp="gcloud auth login"
+alias tg="terragrunt"
+alias tf="terraform"
+alias code="code-insiders"
+## k8s
+alias kubectl="/usr/local/bin/kubectl"
+alias k="kubectl"
+alias kg="kubectl get"
+alias kgns="kubectl get namespace"
+alias kx="kubectx"
