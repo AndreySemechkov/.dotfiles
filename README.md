@@ -37,6 +37,7 @@ Enable dracula theme on Iterm2:
 Setup status bar with git and clock:
     Go to Preferences > Profiles > Session. Turn on Status bar enabled. Then click Configure Status Bar to begin setting up your status bar configuration.
 
+4. Setup VS code insiders build using ./andrey-vs.code-profile
 
 ## TODO List
 - Automate my symlinking script files with a bootstrapping tool like [Dotbot](https://github.com/anishathalye/dotbot)
