@@ -1,21 +1,13 @@
-. "$HOME/.cargo/env"
-
-# enable custom bins
-export PATH=$PATH:~/bin
-
+#Python
 # enable poetry in zsh
 fpath+=~/.zfunc
 
 
-PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
-export PATH=/Users/andrey_semetchkov/.pyenv/bin:/Users/andrey_semetchkov/.poetry/bin:$PATH
+PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:~/bin
+export PATH=/Users/andreys/.pyenv/bin:/Users/andreys/.poetry/bin:/usr/local/bin:$PATH
 
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-#########
-# PYTHON
-#########
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 # Disable pip installs outside of virtualenvs
 export PIP_REQUIRE_VIRTUALENV=true
@@ -30,32 +22,39 @@ export LDFLAGS='-L/usr/local/Cellar/openssl@1.1/1.1.1i/lib'
 #gradle
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
 export PATH=$PATH:/usr/local/Cellar/mysql@5.7/5.7.32/bin
-
-
-
-#########
-# NODEJS
-#########
-# NVM and NodeJS configurations
-export NVM_DIR="$HOME/.nvm"
-
-__lazynvm()
-{
-    unset -f nvm node npm __lazynvm
-    [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-}
-nvm  (){ __lazynvm; nvm  $@; }
-node (){ __lazynvm; node $@; }
-npm  (){ __lazynvm; npm  $@; }
-
-[ -s "/usr/local/opt/nvm/etc/bash_completion" ] && . "/usr/local/opt/nvm/etc/bash_completion"
-export PATH="$NVM_DIR/versions/node/v16.15.1/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+# Add Visual Studio Code (code)
 
 
 # Doing it here in order for pipx installed packages to have precedence over venv names
-export PATH=/Users/andrey_semetchkov/.local/bin:$PATH
+export PATH=/Users/andreys/.local/bin:$PATH
 export PATH=/usr/local/go/bin:$PATH
-export PATH=/Users/andrey_semetchkov/.cargo/bin:$PATH
+export PATH=/Users/andreys/.cargo/bin:$PATH
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv activate qwilt
+
+# Terminal
+parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
+}
+COLOR_DEF='%f'
+COLOR_DIR='%F{197}'
+COLOR_GIT='%F{39}'
+NEWLINE=$'\n'
+setopt PROMPT_SUBST
+source ~/kube-ctx.sh
+export PROMPT='${COLOR_DIR}%d ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}${NEWLINE}$(__kube_ps1)%% \$  '
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+# fzf
+# enable zsh autocomplete by /opt/homebrew/opt/fzf/install
+# fig (CLI autocomplete)
 
 #########
 # ALIASES
@@ -68,9 +67,12 @@ alias gd='git diff'
 alias gc='git add . && git commit --all --message'
 alias gcr='git checkout master && git pull && git checkout - && git rebase -i master'
 alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --graph"
-alias gcm="git checkout master"
+alias gcm="git checkout main"
+alias gcms="git checkout master"
+alias gbc="git pull && git checkout -b ${1}"
 alias gpu="git pull"
 alias gcmu="gcm && gpu"
+alias gcmsu="gcms && gpu"
 alias gss="git stash save --include-untracked"
 alias gsp="git stash pop"
 alias grc="git rebase --continue"
@@ -80,41 +82,23 @@ alias gcp="git checkout -"
 alias gp="git push"
 alias gpf="git push -f"
 alias gbd="git branch -D"
-alias gdm='git diff master'
+alias gdm='git diff main'
 alias gca='git commit --amend'
 alias gitm='git commit --message'
-
 ## dev
-alias cdev='cd ~/dev'
+alias cdcode='cd ~/code'
 alias ll="ls -al"
-# ec2grep
-alias ec2use='ec2 ls'
-alias ec2usw='ec2 --region us-west-2 ls'
-alias ec2euw='ec2 --region eu-west-1 ls'
-alias ecuse='ec2 ssh -F ~/.ssh/config'
-alias ecusw='ec2 --region us-west-2 ssh -F ~/.ssh/config'
-
-#  Usage:
-#  Following chef output in a node:
-#  follow_chef <node_ip>
-#  Following docker logs on a node:
-#  follow_docker <node_ip>
-#  sudo_ssh <node_ip>
-
-follow_chef () {
-   ssh -F /Users/andrey_semetchkov/.ssh/gozer ubuntu@$1 "tail -f -n 10 /var/log/chef-client.firstboot.log | sed '/Firstboot script done/ q'"
-}
-
-follow_docker () {
-   ssh -F /Users/andrey_semetchkov/.ssh/gozer ubuntu@$1 "journalctl -f -u docker.service"
-}
-
-ssh_re_logstash () {
-   ssh -F /Users/andrey_semetchkov/.ssh/gozer -t ubuntu@$1 "echo "Switching to root";sudo --preserve-env docker restart logstash;sudo docker ps"
-}
-
-auth () {
-    AWS_PROFILE=sso aws sso login
-    boundary authenticate oidc -addr https://boundary.mydomain.com:9200 -auth-method-id amoidc_7XurEVv7KV
-    HTTPS_PROXY=http://localhost:3128 NO_PROXY=boundary.mydomain.com boundary connect -addr https://boundary.mydomain.com:9200 -target-name "aws main us-east-1 SQUID" -target-scope-name "Engineering" -listen-port 3128 -exec <LOGIN>
-}
+alias ssodev="okta-awscli --okta-profile dev && export AWS_PROFILE=okta-dev AWS_REGION=eu-west-1"
+alias ssoprestg="okta-awscli --okta-profile prestg && export AWS_PROFILE=okta-prestg AWS_REGION=eu-west-1"
+alias ssoprod="okta-awscli --okta-profile prod && export AWS_PROFILE=okta-prod  AWS_REGION=us-west-2"
+alias ssogcpdefault="gcloud auth application-default login"
+alias ssogcp="gcloud auth login"
+alias tg="terragrunt"
+alias tf="terraform"
+alias code="code-insiders"
+## k8s
+alias kubectl="/usr/local/bin/kubectl"
+alias k="kubectl"
+alias kg="kubectl get"
+alias kgns="kubectl get namespace"
+alias kx="kubectx"
