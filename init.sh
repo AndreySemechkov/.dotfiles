@@ -7,6 +7,10 @@ brew bundle --file ~/.dotfiles/Brewfile
 echo "$(which zsh)" | sudo tee -a /etc/shells
 echo "Changing do zsh"
 chsh -s $(which zsh)
+# turn on fzf history autocomplete
+/opt/homebrew/opt/fzf/install
+# turn on fig terminal autocomplete
+fig
 #config ssh
 mkdir ~/.ssh
 cp ~/.dotfiles/.ssh-example ~/.ssh/myconfig
