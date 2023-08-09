@@ -1,4 +1,5 @@
-#Python
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 # enable poetry in zsh
 fpath+=~/.zfunc
 
@@ -31,31 +32,57 @@ export PATH=/Users/andreys/.local/bin:$PATH
 export PATH=/usr/local/go/bin:$PATH
 export PATH=/Users/andreys/.cargo/bin:$PATH
 
+#Terminal
 
+COLOR_DEF=$'%f'
+COLOR_USR=$'%F{243}'
+COLOR_DIR=$'%F{197}'
+COLOR_GIT=$'%F{39}'
+
+function parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
+}
+
+function __kube_ps1()
+{
+    # Get current context
+    CONTEXT=$(cat ~/.kube/config | grep "current-context:" | sed "s/current-context: //")
+
+    if [ -n "$CONTEXT" ]; then
+        echo "(k8s: ${CONTEXT})"
+    fi
+}
+
+function _update_prompt() {
+    export PROMPT='${COLOR_USR}%n ${COLOR_DIR}%~ ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF} $(__kube_ps1) $ '
+}
+
+function chpwd() {
+    _update_prompt
+}
+
+function preexec_kx_hook() {
+    if [[ $1 == "kx" ]]; then
+        # Do something when 'kx' command is executed
+        _update_prompt
+    fi
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec preexec_kx_hook
+
+setopt PROMPT_SUBST
+_update_prompt
+add-zsh-hook chpwd
+
+#Python
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
-pyenv activate qwilt
 
-# Terminal
-parse_git_branch() {
-    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
-}
-COLOR_DEF='%f'
-COLOR_DIR='%F{197}'
-COLOR_GIT='%F{39}'
-NEWLINE=$'\n'
-setopt PROMPT_SUBST
-source ~/kube-ctx.sh
-export PROMPT='${COLOR_DIR}%d ${COLOR_GIT}$(parse_git_branch)${COLOR_DEF}${NEWLINE}$(__kube_ps1)%% \$  '
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-
-# fzf
-# enable zsh autocomplete by /opt/homebrew/opt/fzf/install
-# fig (CLI autocomplete)
-
 #########
 # ALIASES
 #########
@@ -72,12 +99,12 @@ alias gcms="git checkout master"
 alias gbc="git pull && git checkout -b ${1}"
 alias gpu="git pull"
 alias gcmu="gcm && gpu"
-alias gcmsu="gcms && gpu"
+alias gcmasteru="gcms && gpu"
 alias gss="git stash save --include-untracked"
 alias gsp="git stash pop"
 alias grc="git rebase --continue"
 alias grm="git rebase -i master"
-alias gco="git checkout"
+alias gco="git checkout $1 && $(_update_prompt)"
 alias gcp="git checkout -"
 alias gp="git push"
 alias gpf="git push -f"
@@ -89,17 +116,26 @@ alias gitm='git commit --message'
 
 ## AWS
 alias aws='~/.local/bin/aws2/aws-cli/aws'
-
 ## dev
 alias cdev='cd ~/dev'
 alias ll="ls -al"
 alias ssogcp="gcloud auth login"
 alias tg="terragrunt"
 alias tf="terraform"
+alias t="terraform"
 alias code="code-insiders"
 ## k8s
 alias kubectl="/usr/local/bin/kubectl"
 alias k="kubectl"
 alias kg="kubectl get"
 alias kgns="kubectl get namespace"
-alias kx="kubectx"
+alias kx="kubectx && $(_update_prompt)"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# CLI tools i use
+# fzf
+# enable zsh autocomplete by /opt/homebrew/opt/fzf/install
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
