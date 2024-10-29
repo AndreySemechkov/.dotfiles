@@ -25,20 +25,6 @@ chmod +x ~/.dotfiles/init.sh
 sudo bash ~/.dotfiles/init.sh
 ```
 
-4. Setup iTerm2
-
-Enable dracula theme on Iterm2:
-    - iTerm2 > Preferences > Profiles > Colors Tab
-    - Open the Color Presets... drop-down in the bottom right corner
-    - Select Import... from the list
-       Select the Dracula.itermcolors file
-    - Select the Dracula from Color Presets...
-
-Setup status bar with git and clock:
-    Go to Preferences > Profiles > Session. Turn on Status bar enabled. Then click Configure Status Bar to begin setting up your status bar configuration.
-
-4. Setup VS code insiders build using ./andrey-vs.code-profile
-
 ## TODO List
 - Automate my symlinking script files with a bootstrapping tool like [Dotbot](https://github.com/anishathalye/dotbot)
 - Learn how to use [`defaults`](https://macos-defaults.com/#%F0%9F%99%8B-what-s-a-defaults-command) to record and restore System Preferences and other macOS configurations
