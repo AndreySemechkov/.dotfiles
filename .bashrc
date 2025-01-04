@@ -1,1 +1,1 @@
-source $HOME/.dotfiles/mac/.myrc
+source $HOME/.dotfiles/.zshrc
