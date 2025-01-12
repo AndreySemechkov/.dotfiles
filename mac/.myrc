@@ -161,10 +161,12 @@ alias t="terraform"
 alias kubectl="kubecolor"
 alias k="kubectl"
 alias kg="kubectl get"
-alias kgns="kubectl get namespace"
+alias kns="kubens"
 alias kx="kubectx"
+alias kgx="$(k config get-contexts $(k config current-context)"
 alias aie="gh copilot explain"
 alias ai="gh copilot suggest"
 alias fabric="/opt/homebrew/bin/fabric"
+alias ghostty="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
