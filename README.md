@@ -12,6 +12,14 @@ vi ~/.ssh/personal_github
 chmod 600 ~/.ssh/personal_github
 # Clone my .dotfiles the setup repo
 git clone git@github.com:AndreySemechkov/.dotfiles.git ~/.dotfiles
+# install brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew update
+brew install zsh
+# finalize install zsh
+echo "$(which zsh)" | sudo tee -a /etc/shells
+echo "Changing default to zsh"
+chsh -s $(which zsh)
 # run my bootstrapping install script
 chmod +x ~/.dotfiles/mac/init.sh
 bash ~/.dotfiles/mac/init.sh
