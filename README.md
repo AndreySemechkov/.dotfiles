@@ -14,7 +14,7 @@ chmod 600 ~/.ssh/personal_github
 git clone git@github.com:AndreySemechkov/.dotfiles.git ~/.dotfiles
 # run my bootstrapping install script
 chmod +x ~/.dotfiles/mac/init.sh
-sudo bash ~/.dotfiles/mac/init.sh
+bash ~/.dotfiles/mac/init.sh
 ```
 
 ## TODO List
