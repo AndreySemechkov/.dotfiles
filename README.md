@@ -9,6 +9,7 @@ xcode-select --install
 mkdir -p ~/.ssh
 echo -e "Host github.com\n    HostName github.com\n    IdentityFile ~/.ssh/personal_github\n    IdentitiesOnly yes" > ~/.ssh/config
 vi ~/.ssh/personal_github
+chmod 600 ~/.ssh/personal_github
 # Clone my .dotfiles the setup repo
 git clone git@github.com:AndreySemechkov/.dotfiles.git ~/.dotfiles
 # run my bootstrapping install script
