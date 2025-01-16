@@ -4,10 +4,6 @@
 brew update
 # install my brew software, refresh Brewfile periodically using > brew bundle dump
 brew bundle --file ~/.dotfiles/mac/Brewfile
-# finalize install zsh
-echo "$(which zsh)" | sudo tee -a /etc/shells
-echo "Changing default to zsh"
-chsh -s $(which zsh)
 # install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 cat ~/.dotfiles/.ssh-example >> ~/.ssh/config
