@@ -88,15 +88,11 @@ export GOROOT=$(brew --prefix go)/libexec
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 
-# Get list of gnubin directories, add to path
-export GNUBINS="$(find /usr/local/opt -type d -follow -name gnubin -print)";
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-for bindir in ${GNUBINS[@]}; do
-  export PATH=$bindir:$PATH;
-done;
 
-# k8s
-source <(kubectl completion zsh)
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 #Python
@@ -158,7 +154,8 @@ alias cat="bat"
 alias tg="terragrunt"
 alias tf="terraform"
 alias t="terraform"
-alias kubectl="kubecolor"
+alias kubectl="/opt/homebrew/Cellar/kubernetes-cli@1.31/1.31.5/bin/kubectl"
+source <(kubectl completion zsh)
 alias k="kubectl"
 alias kg="kubectl get"
 alias kns="kubens"
@@ -169,4 +166,5 @@ alias ai="gh copilot suggest"
 alias fabric="/opt/homebrew/bin/fabric"
 alias ghostty="/Applications/Ghostty.app/Contents/MacOS/ghostty"
 
+alias op=$HOME/tagena/glance/opsacli
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

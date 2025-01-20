@@ -74,6 +74,10 @@ plugins=(
     git
     you-should-use
     zsh-bat
+    kubectl
+    docker
+    golang
+    opsacli
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -106,3 +110,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source $HOME/.dotfiles/mac/.myrc
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
