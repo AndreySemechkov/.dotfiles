@@ -1,13 +1,15 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 # enable poetry in zsh
 fpath+=~/.zfunc
 
+function cursor {
+        /bin/Cursor $@
+}
 
 PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:~/bin
 export PATH=~/.pyenv/versions:/home/linuxbrew/.linuxbrew/opt:/usr/local/bin:$PATH
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 alias brew=/home/linuxbrew/.linuxbrew/bin/brew
+export PATH="/snap/bin:$PATH"
 
 # Disable pip installs outside of virtualenvs
 export PIP_REQUIRE_VIRTUALENV=true
@@ -82,4 +84,3 @@ alias kgns="kubectl get namespace"
 alias kx="kubectx"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if [ -e /home/andrey/.nix-profile/etc/profile.d/nix.sh ]; then . /home/andrey/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
