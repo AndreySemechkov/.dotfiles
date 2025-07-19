@@ -77,7 +77,6 @@ plugins=(
     kubectl
     docker
     golang
-    opsacli
 )
 
 source $ZSH/oh-my-zsh.sh
