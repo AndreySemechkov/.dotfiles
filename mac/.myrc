@@ -165,6 +165,4 @@ alias aie="gh copilot explain"
 alias ai="gh copilot suggest"
 alias fabric="/opt/homebrew/bin/fabric"
 alias ghostty="/Applications/Ghostty.app/Contents/MacOS/ghostty"
-
-alias op=$HOME/tagena/glance/opsacli
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
